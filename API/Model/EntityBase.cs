@@ -2,8 +2,9 @@
 
 namespace API.Model
 {
-    public class Character : EntityBase
+    public class EntityBase
     {
-        public string Name { get; set; }
+        [Key]
+        public Guid Id { get; set; }
     }
 }

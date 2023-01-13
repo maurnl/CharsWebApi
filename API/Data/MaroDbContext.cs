@@ -10,6 +10,5 @@ namespace API.Data
 
         }
         public DbSet<Character> Characters { get; set; }
-
     }
 }

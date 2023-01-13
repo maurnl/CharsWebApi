@@ -1,4 +1,5 @@
 using API.Data;
+using API.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace API
@@ -15,6 +16,7 @@ namespace API
             {
                 options.UseInMemoryDatabase("marodb");
             });
+            builder.Services.AddScoped<IRepository<Character>, Repository<Character>>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -35,6 +37,8 @@ namespace API
 
 
             app.MapControllers();
+
+            DbInitializer.PopulateDb(app);
 
             app.Run();
         }
