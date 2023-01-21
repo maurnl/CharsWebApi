@@ -1,4 +1,7 @@
 ﻿using API.Model;
+using API.Model.Relationships;
+using API.Model.Relationships.Types;
+using System.Net.Mime;
 
 namespace API.Data
 {
@@ -17,24 +20,35 @@ namespace API.Data
         {
             if(!context.Characters.Any())
             {
-                context.Characters.AddRange(new List<Character>
+                var charUno = new Character
                 {
+                    Name = "Testonio"
+                };
+                var charDos = new Character
+                {
+                    Name = "Tester"
+                };
+
+                context.Characters.Add(charUno);
+                context.Characters.Add(charDos);
+
+                context.Characters.Add(
                     new Character
                     {
-                        Id = Guid.NewGuid(),
-                        Name = "Testo"
-                    },
-                    new Character
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Testonio"
-                    },
-                    new Character
-                    {
-                        Id = Guid.NewGuid(),
-                        Name = "Tester"
-                    }
+                        Name = "Testo",
+                    });
+                
+                context.SaveChanges();
+
+                context.Relationships.Add(new Relationship
+                {
+                    Character = charUno,
+                    CharacterId = charUno.Id,
+                    RelatedCharacter = charDos,
+                    RelatedCharacterId = charDos.Id,
+                    RelationshipName = "parental",
                 });
+
                 context.SaveChanges();
             }
         }
