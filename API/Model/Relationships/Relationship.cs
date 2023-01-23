@@ -9,8 +9,11 @@ namespace API.Model.Relationships
         public Character Character { get; set; }
         public int RelatedCharacterId { get; set; }
         public Character RelatedCharacter { get; set; }
-        public string RelationshipName { get; set; }
-        public RelationshipDirection Direction { get; set; }
+        public string RelationshipTypeName { get; set; }
+        [NotMapped]
+        public string RelativeRelationshipName { get; set; }
+        [NotMapped]
+        public string OppositeRelativeRelationshipName { get; set; }
 
         [NotMapped]
         public IRelationshipType RelationshipType
@@ -19,7 +22,7 @@ namespace API.Model.Relationships
             {
                 if(_relType == null)
                 {
-                    return new RelationshipTypeFactory().CreateRelationship(RelationshipName);
+                    _relType = new RelationshipTypeFactory().CreateRelationship(RelationshipTypeName);
                 }
                 return _relType;
             }

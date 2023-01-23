@@ -27,7 +27,11 @@ namespace API.Controllers
         [HttpGet]
         public ActionResult<List<CharacterReadDto>> GetCharacters()
         {
-            var characters = _repository.GetAll().Include(c => c.RelatedChars).Include(c => c.RelatedToChars).Include(c => c.Relationships).Include(c => c.RelatedChars).ToList();
+            var characters = _repository.GetAll().Include(c => c.Relationships).Include(c => c.RelatedTo).ToList();
+            foreach (var item in characters)
+            {
+                item.UpdateRelationshipNames();
+            }
             return Ok(_mapper.Map<IEnumerable<CharacterReadDto>>(characters));
         }
 

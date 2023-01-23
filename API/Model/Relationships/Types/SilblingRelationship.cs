@@ -2,20 +2,10 @@
 {
     public class SilblingRelationship : IRelationshipType
     {
-        public RelationshipDirection Direction { get; set; }
-
-        public RelationshipDirection[] GetValidDirections()
+        public void UpdateNames(Character character, Relationship rel)
         {
-            return new RelationshipDirection[]
-            {
-                RelationshipDirection.FromRight,
-                RelationshipDirection.FromLeft
-            };
-        }
-
-        public string ToText(bool fromCaller)
-        {
-            return "Silbling";
+            rel.RelativeRelationshipName = "Silbling";
+            rel.OppositeRelativeRelationshipName = "Silbling";
         }
     }
 }

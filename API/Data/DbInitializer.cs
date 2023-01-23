@@ -46,10 +46,11 @@ namespace API.Data
                     CharacterId = charUno.Id,
                     RelatedCharacter = charDos,
                     RelatedCharacterId = charDos.Id,
-                    RelationshipName = "parental",
+                    RelationshipTypeName = "parental",
                 });
 
                 context.SaveChanges();
+
             }
         }
     }

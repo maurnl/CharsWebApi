@@ -16,20 +16,17 @@ namespace API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Relationship>()
-                        .HasKey(t => new
-                        {
-                            t.CharacterId,
-                            t.RelatedCharacterId
-                        });
+            base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Character>()
-                        .HasMany(e => e.RelatedChars)
-                        .WithMany(e => e.RelatedToChars)
-                        .UsingEntity<Relationship>(
-                            je => je.HasOne(e => e.Character).WithMany(e => e.Relationships), // <-- here you would specify the corresponding collection nav property when exists
-                            je => je.HasOne(e => e.RelatedCharacter).WithMany(e => e.RelatedTo) // <-- here you would specify the corresponding collection nav property when exists
-                        );
+            modelBuilder.Entity<Relationship>()
+                        .HasOne(r => r.Character)
+                        .WithMany(r => r.Relationships)
+                        .HasForeignKey(r => r.CharacterId);
+
+            modelBuilder.Entity<Relationship>()
+                        .HasOne(r => r.RelatedCharacter)
+                        .WithMany(r => r.RelatedTo)
+                        .HasForeignKey(r => r.RelatedCharacterId);
         }
     }
 }

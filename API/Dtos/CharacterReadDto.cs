@@ -6,8 +6,6 @@ namespace API.Dtos
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        //public ICollection<CharacterReadDto> RelatedChars { get; set; } = new List<CharacterReadDto>();
-        //public ICollection<CharacterReadDto> RelatedToChars { get; set; } = new List<CharacterReadDto>();
         public ICollection<RelationshipReadDto> Relationships { get; set; } = new List<RelationshipReadDto>();
         public ICollection<RelationshipReadDto> RelatedTo { get; set; } = new List<RelationshipReadDto>();
     }

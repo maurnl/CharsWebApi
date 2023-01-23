@@ -1,5 +1,3 @@
-using API.Extensions;
-
 namespace API.Model.Relationships
 {
     public class RelationshipBuilder
@@ -31,16 +29,8 @@ namespace API.Model.Relationships
             return this;
         }
 
-        public RelationshipBuilder WithDirection(RelationshipDirection direction)
-        {
-            _instance.Direction = direction;
-            _instance.RelationshipType.Direction = direction;
-            return this;
-        }
-
         public Relationship Build()
         {
-            _instance.ValidateDirection();
             return _instance;
         }
     }

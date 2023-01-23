@@ -50,12 +50,11 @@ namespace API.Data
             var typeFactory = new RelationshipTypeFactory();
             relationshipBuilder.Link(character)
                                .WithCharacter(relatedCharacter)
-                               .As(typeFactory.CreateRelationship(relationship))
-                               .WithDirection(direction);
+                               .As(typeFactory.CreateRelationship(relationship));
 
 
             var relationshipModel = relationshipBuilder.Build();
-            relationshipModel.RelationshipName = relationship;
+            relationshipModel.RelationshipTypeName = relationship;
             _context.Relationships.Add(relationshipModel);
         }
 

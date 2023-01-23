@@ -2,20 +2,19 @@
 {
     public class ParentalRelationship : IRelationshipType
     {
-        public RelationshipDirection Direction { get; set; }
-
-        public RelationshipDirection[] GetValidDirections()
+        public void UpdateNames(Character character, Relationship rel)
         {
-            return new RelationshipDirection[] 
+            if(rel.Character == character)
             {
-                RelationshipDirection.FromRight,
-                RelationshipDirection.FromLeft
-            };
+                rel.RelativeRelationshipName = "Father";
+                rel.OppositeRelativeRelationshipName = "Son";
+            }
+            else
+            {
+                rel.RelativeRelationshipName = "Son";
+                rel.OppositeRelativeRelationshipName = "Father";
+            }
         }
 
-        public string ToText(bool fromCaller)
-        {
-            return fromCaller && Direction == RelationshipDirection.FromRight ? "Children" : "Parent";
-        }
     }
 }

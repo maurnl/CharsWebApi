@@ -2,19 +2,10 @@
 {
     public class StrangerRelationship : IRelationshipType
     {
-        public RelationshipDirection Direction { get; set; }
-
-        public RelationshipDirection[] GetValidDirections()
+        public void UpdateNames(Character character, Relationship rel)
         {
-            return new RelationshipDirection[]
-            {
-                RelationshipDirection.NonDirectional
-            };
-        }
-
-        public string ToText(bool fromCaller)
-        {
-            return "Stranger";
+            rel.RelativeRelationshipName = "Stranger";
+            rel.OppositeRelativeRelationshipName = "Stranger";
         }
     }
 }
