@@ -37,11 +37,11 @@ namespace API.Data
             _context.SaveChanges();
         }
 
-        public void AddRelationship(int characterId, int relatedCharacterId, string relationship, RelationshipDirection direction)
+        public void AddRelationship(int characterId, int relatedCharacterId, string relationship)
         {
             if(!CharacterExists(characterId) || !CharacterExists(relatedCharacterId))
             {
-                throw new ArgumentException();
+                throw new ArgumentException(nameof(characterId));
             }
 
             var character = Get(characterId);

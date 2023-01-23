@@ -8,7 +8,7 @@ namespace API.Data
         IQueryable<Character> GetAll();
         Character Get(int id);
         void Add(Character entity);
-        void AddRelationship(int characterId, int relatedCharacterId, string relationship, RelationshipDirection direction);
+        void AddRelationship(int characterId, int relatedCharacterId, string relationship);
         bool CharacterExists(int characterId);
         void SaveChanges();
     }

@@ -88,12 +88,11 @@ namespace API.Controllers
         [HttpPatch("{id}/family/add/{relatedId}")]
         public ActionResult<CharacterReadDto> AddRelationship(int id,
                                             int relatedId,
-                                            [FromQuery] string relationship = "stranger",
-                                            [FromQuery] RelationshipDirection direction = RelationshipDirection.NonDirectional)
+                                            [FromQuery] string relationship = "stranger")
         {
             try
             {
-                _repository.AddRelationship(id, relatedId, relationship, direction);
+                _repository.AddRelationship(id, relatedId, relationship);
                 _repository.SaveChanges();
             }catch(ArgumentException)
             {
