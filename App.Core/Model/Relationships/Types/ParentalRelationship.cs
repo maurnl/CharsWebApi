@@ -1,4 +1,5 @@
 ﻿using App.Core.Model;
+using System.Reflection;
 
 namespace App.Core.Model.Relationships.Types
 {
@@ -8,15 +9,35 @@ namespace App.Core.Model.Relationships.Types
         {
             if (rel.Character == character)
             {
-                rel.RelativeRelationshipName = "Father";
-                rel.OppositeRelativeRelationshipName = "Son";
+                rel.RelativeRelationshipName = SetPaternalNameByGender(character.Gender);
+
             }
             else
             {
-                rel.RelativeRelationshipName = "Son";
-                rel.OppositeRelativeRelationshipName = "Father";
+                rel.OppositeRelativeRelationshipName = SetChildrenNameByGender(character.Gender);
             }
         }
 
+        private string SetPaternalNameByGender(Gender gender)
+        {
+            return gender switch
+            {
+                Gender.Male => "Father",
+                Gender.Female => "Mother",
+                Gender.Unknown => "Parent",
+                _ => ""
+            };
+        }
+
+        private string SetChildrenNameByGender(Gender gender)
+        {
+            return gender switch
+            {
+                Gender.Male => "Son",
+                Gender.Female => "Daugther",
+                Gender.Unknown => "Children",
+                _ => ""
+            };
+        }
     }
 }

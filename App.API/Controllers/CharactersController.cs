@@ -48,6 +48,19 @@ namespace App.API.Controllers
             return Ok(character.Relationships);
         }
 
+        [HttpPut("{id}")]
+        public ActionResult<CharacterReadDto> UpdateCharacter(int id, CharacterUpdateDto newInfo)
+        {
+            try 
+            {
+                var character = _characterService.UpdateCharacter(id, newInfo);
+                return Ok(character);
+            }catch(Exception ex)
+            {
+                return BadRequest(new { Error = $"Invalid {ex.Message}" });
+            }
+        }
+
         [HttpPost("create")]
         public ActionResult<CharacterReadDto> CreateCharacter(CharacterCreateDto character)
         {
@@ -68,7 +81,7 @@ namespace App.API.Controllers
             return CreatedAtRoute(nameof(GetCharacterInfo), new { id = createdCharacter.Id }, createdCharacter);
         }
 
-        [HttpPatch("{id}/family/add/{relatedId}")]
+        [HttpPost("{id}/family/add/{relatedId}")]
         public ActionResult<CharacterReadDto> AddRelationship(int id,
                                             int relatedId,
                                             [FromQuery] string relationship = "stranger")
@@ -81,11 +94,7 @@ namespace App.API.Controllers
             {
                 return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                return BadRequest();
-            }
-            catch (NotSupportedException)
+            catch (Exception)
             {
                 return BadRequest();
             }

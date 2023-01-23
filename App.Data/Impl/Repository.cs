@@ -1,5 +1,6 @@
 using App.Core.Model;
 using App.DataAccess.Abstractions;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.DataAccess.Impl
 {
@@ -35,6 +36,16 @@ namespace App.DataAccess.Impl
         public IQueryable<T> GetAll()
         {
             return _context.Set<T>().AsQueryable() ?? Enumerable.Empty<T>().AsQueryable();
+        }
+
+        public void Update(T entity)
+        {
+            if(entity == null)
+            {
+                throw new ArgumentNullException(nameof(entity));
+            }
+
+            _context.Set<T>().Entry(entity).State = EntityState.Modified;
         }
 
         public bool SaveChanges()

@@ -7,6 +7,8 @@ namespace App.Application.Dtos
         [Required]
         [StringLength(30)]
         public string Name { get; set; } = "unnamed";
+        [Required]
+        public string Gender { get; set; } = "unknown";
 
     }
 }

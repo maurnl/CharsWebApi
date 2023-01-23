@@ -21,11 +21,13 @@ namespace App.DataAccess.Util
             {
                 var charUno = new Character
                 {
-                    Name = "Testonio"
+                    Name = "Testonio",
+                    Gender = Gender.Male
                 };
                 var charDos = new Character
                 {
-                    Name = "Tester"
+                    Name = "Tester",
+                    Gender = Gender.Female
                 };
 
                 context.Characters.Add(charUno);
@@ -35,6 +37,7 @@ namespace App.DataAccess.Util
                     new Character
                     {
                         Name = "Testo",
+                        Gender = Gender.Unknown
                     });
 
                 context.SaveChanges();

@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace App.DataAccess
 {
-    public static class DataServicesExtensions
+    public static class DataAcessServicesExtensions
     {
         public static IServiceCollection AddDataAccess(this IServiceCollection services)
         {

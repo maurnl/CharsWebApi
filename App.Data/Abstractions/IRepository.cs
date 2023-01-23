@@ -7,6 +7,8 @@ namespace App.DataAccess.Abstractions
         IQueryable<T> GetAll();
         T Get(int id);
         void Add(T entity);
+
+        void Update(T entity);
         bool Exists(int entityId);
         bool SaveChanges();
     }

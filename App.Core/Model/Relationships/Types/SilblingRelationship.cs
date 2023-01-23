@@ -7,8 +7,26 @@ namespace App.Core.Model.Relationships.Types
     {
         public void UpdateNames(Character character, Relationship rel)
         {
-            rel.RelativeRelationshipName = "Silbling";
-            rel.OppositeRelativeRelationshipName = "Silbling";
+            if (rel.Character == character)
+            {
+                rel.RelativeRelationshipName = SetSilbingsNameByGender(character.Gender);
+
+            }
+            else
+            {
+                rel.OppositeRelativeRelationshipName = SetSilbingsNameByGender(character.Gender);
+            }
+        }
+
+        private string SetSilbingsNameByGender(Gender gender)
+        {
+            return gender switch
+            {
+                Gender.Male => "Brother",
+                Gender.Female => "Sister",
+                Gender.Unknown => "Silbling",
+                _ => ""
+            };
         }
     }
 }

@@ -8,5 +8,6 @@ namespace App.Application.Services
         List<CharacterReadDto> GetAllCharacters();
         CharacterReadDto GetCharacterById(int id);
         void AddRelationship(int characterId, int relatedCharacterId, string relationship);
+        CharacterReadDto UpdateCharacter(int characterId, CharacterUpdateDto newCharData);
     }
 }

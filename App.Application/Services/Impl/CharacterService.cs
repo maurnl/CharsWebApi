@@ -4,6 +4,7 @@ using App.Application.Dtos;
 using App.Core.Model;
 using App.DataAccess.Abstractions;
 using App.Core.Model.Relationships;
+using App.Application.Extensions;
 
 namespace App.Application.Services.Impl
 {
@@ -55,15 +56,21 @@ namespace App.Application.Services.Impl
                                .WithCharacter(relatedCharacter)
                                .As(typeFactory.CreateRelationship(relationship));
 
-
             var relationshipModel = relationshipBuilder.Build();
             relationshipModel.RelationshipTypeName = relationship;
             _relationshipRepo.Add(relationshipModel);
+            _relationshipRepo.SaveChanges();
         }
 
         public CharacterReadDto CreateCharacter(CharacterCreateDto character)
         {
+            if(!GenderExists(character.Gender))
+            {
+                throw new ArgumentException(nameof(character.Gender)); 
+            }
+
             var newCharacter = _mapper.Map<Character>(character);
+
             try
             {
                 _chararctersRepo.Add(newCharacter);
@@ -81,6 +88,31 @@ namespace App.Application.Services.Impl
             return _mapper.Map<CharacterReadDto>(newCharacter);
         }
 
+        public CharacterReadDto UpdateCharacter(int characterId, CharacterUpdateDto newCharData)
+        {
+            if(!_chararctersRepo.Exists(characterId))
+            {
+                throw new ArgumentException(nameof(characterId));
+            }
+
+            if(!GenderExists(newCharData.Gender))
+            {
+                throw new ArgumentException(nameof(newCharData.Gender));
+            }
+
+            var character = _chararctersRepo.Get(characterId);
+            character.Gender = (Gender) Enum.Parse(typeof(Gender), newCharData.Gender.FirstLetterToUpper());
+            character.Name = newCharData.Name;
+
+            _chararctersRepo.Update(character);
+            _chararctersRepo.SaveChanges();
+            return _mapper.Map<CharacterReadDto>(character);
+        }
+
+        private bool GenderExists(string name)
+        {
+            return Enum.GetNames(typeof(Gender)).FirstOrDefault(g => g.ToString() == name.FirstLetterToUpper()) != null;
+        }
     }
 }
 
