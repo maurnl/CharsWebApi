@@ -19,6 +19,8 @@ namespace App.Application
         {
             services.AddServices(env);
 
+            services.AddHttpContextAccessor();
+
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             return services;

@@ -19,7 +19,6 @@ namespace ContainerNinja.Core.Options
         {
             if (name == JwtBearerDefaults.AuthenticationScheme)
             {
-                Console.WriteLine("asdasd");
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateAudience = true,
@@ -30,6 +29,7 @@ namespace ContainerNinja.Core.Options
                     ValidAudience = _configuration["Jwt:Audience"]
                 };
 
+                var lista = new List<string> { _configuration["Jwt:Key"], _configuration["Jwt:Issuer"], _configuration["Jwt:Audience"] };
                 options.Events = new JwtBearerEvents()
                 {
                     OnAuthenticationFailed = (context) =>

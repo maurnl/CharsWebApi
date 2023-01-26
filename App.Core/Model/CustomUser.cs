@@ -9,6 +9,7 @@ namespace App.Core.Model
 {
     public class CustomUser : IdentityUser
     {
+        public string FullName { get; set; }
         public ICollection<Character> Characters { get; set; }
     }
 }
