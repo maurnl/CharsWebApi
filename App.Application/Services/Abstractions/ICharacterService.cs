@@ -1,6 +1,6 @@
 using App.Application.Dtos;
 
-namespace App.Application.Services
+namespace App.Application.Services.Abstractions
 {
     public interface ICharacterService
     {
@@ -9,5 +9,6 @@ namespace App.Application.Services
         CharacterReadDto GetCharacterById(int id);
         void AddRelationship(int characterId, int relatedCharacterId, string relationship);
         CharacterReadDto UpdateCharacter(int characterId, CharacterUpdateDto newCharData);
+        CharacterReadDto DeleteCharacter(int characterId);
     }
 }

@@ -2,6 +2,7 @@
 using App.Core.Model.Relationships;
 using App.DataAccess.Abstractions;
 using App.DataAccess.Impl;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,9 +12,9 @@ namespace App.DataAccess
     {
         public static IServiceCollection AddDataAccess(this IServiceCollection services)
         {
-            AddDatabase(services);
-
-            AddRepos(services);
+            services.AddDatabase()
+                    .AddRepos()
+                    .AddAuthorization();
 
             return services;
         }
@@ -32,6 +33,16 @@ namespace App.DataAccess
             {
                 opt.UseInMemoryDatabase("marodb");
             });
+
+
+            return services;
+        }
+
+        public static IServiceCollection AddAuthorization(this IServiceCollection services)
+        {
+            services.AddIdentityCore<CustomUser>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<MaroDbContext>();
 
             return services;
         }

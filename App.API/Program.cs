@@ -1,7 +1,6 @@
 using App.Application;
 using App.DataAccess.Util;
 using App.DataAccess;
-using Microsoft.EntityFrameworkCore;
 
 namespace App.API
 {
@@ -20,6 +19,8 @@ namespace App.API
 
             builder.Services.AddDataAccess();
 
+            builder.Services.AddJwtAuthentication();
+
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())
@@ -31,6 +32,7 @@ namespace App.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
 
             app.MapControllers();

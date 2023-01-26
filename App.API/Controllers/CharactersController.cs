@@ -1,12 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using App.Application.Services;
 using App.Application.Dtos;
+using Microsoft.AspNetCore.Http.HttpResults;
+using App.Core.Model;
+using Microsoft.AspNetCore.Authorization;
+using App.Application.Services.Abstractions;
 
 namespace App.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class CharactersController : ControllerBase
     {
         private readonly ICharacterService _characterService;
@@ -17,52 +20,66 @@ namespace App.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<CharacterReadDto>> GetCharacters()
+        [ProducesResponseType(typeof(IEnumerable<CharacterReadDto>), 200)]
+        public IResult GetCharacters()
         {
-            return _characterService.GetAllCharacters();
+            var characters = _characterService.GetAllCharacters();
+            return TypedResults.Ok(characters);
         }
 
         [HttpGet("{id}", Name = "GetCharacterInfo")]
-        public ActionResult<CharacterReadDto> GetCharacterInfo(int id)
+        [ProducesResponseType(typeof(CharacterReadDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public Results<Ok<CharacterReadDto>, NotFound> GetCharacterInfo(int id)
         {
             var character = _characterService.GetCharacterById(id);
 
-            if (character == null)
+            if (character is null)
             {
-                return NotFound();
+                return TypedResults.NotFound();
             }
 
-            return Ok(character);
+            return TypedResults.Ok(character);
         }
 
         [HttpGet("{id}/family")]
-        public ActionResult<IEnumerable<RelationshipReadDto>> GetFamilyForCharacter(int id)
+        [ProducesResponseType(typeof(List<List<RelationshipReadDto>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public Results<Ok<List<List<RelationshipReadDto>>>, NotFound> GetFamilyForCharacter(int id)
         {
             var character = _characterService.GetCharacterById(id);
 
-            if (character == null)
+            if (character is null)
             {
-                return NotFound();
+                return TypedResults.NotFound();
             }
-
-            return Ok(character.Relationships);
+             var relationshipsLists = new List<List<RelationshipReadDto>>
+                {
+                    character.Relationships.ToList(),
+                    character.RelatedTo.ToList()
+                };
+            return TypedResults.Ok(relationshipsLists);
         }
 
         [HttpPut("{id}")]
-        public ActionResult<CharacterReadDto> UpdateCharacter(int id, CharacterUpdateDto newInfo)
+        [ProducesResponseType(typeof(CharacterReadDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public Results<Ok<CharacterReadDto>, NotFound> UpdateCharacter(int id, CharacterUpdateDto newInfo)
         {
             try 
             {
                 var character = _characterService.UpdateCharacter(id, newInfo);
-                return Ok(character);
-            }catch(Exception ex)
+                return TypedResults.Ok(character);
+            }catch
             {
-                return BadRequest(new { Error = $"Invalid {ex.Message}" });
+                return TypedResults.NotFound();
             }
         }
 
         [HttpPost("create")]
-        public ActionResult<CharacterReadDto> CreateCharacter(CharacterCreateDto character)
+        [ProducesResponseType(typeof(CharacterReadDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public Results<Created<CharacterReadDto>, BadRequest> CreateCharacter(CharacterCreateDto character)
         {
             CharacterReadDto createdCharacter;
             try
@@ -71,14 +88,15 @@ namespace App.API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                return BadRequest();
+                return TypedResults.BadRequest();
             }
             catch (ArgumentNullException)
             {
-                return BadRequest();
+                return TypedResults.BadRequest();
             }
 
-            return CreatedAtRoute(nameof(GetCharacterInfo), new { id = createdCharacter.Id }, createdCharacter);
+            var uri = Url.Action(nameof(GetCharacterInfo), new { id = createdCharacter.Id }) ?? $"/{createdCharacter.Id}";
+            return TypedResults.Created(uri, createdCharacter);
         }
 
         [HttpPost("{id}/family/add/{relatedId}")]
@@ -101,6 +119,21 @@ namespace App.API.Controllers
 
             var updatedCharacter = _characterService.GetCharacterById(id);
             return Ok(updatedCharacter);
+        }
+
+        [HttpDelete("{id}/delete")]
+        [ProducesResponseType(typeof(CharacterReadDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<CharacterReadDto> DeleteCharacter(int id)
+        {
+            try
+            {
+                var character = _characterService.DeleteCharacter(id);
+                return Ok(character);
+            }catch(Exception)
+            {
+                return NotFound();
+            }
         }
     }
 }

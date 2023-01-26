@@ -52,5 +52,15 @@ namespace App.DataAccess.Impl
         {
             return _context.SaveChanges() >= 0;
         }
+
+        public void Remove(T entity)
+        {
+            _context.Set<T>().Remove(entity);
+        }
+
+        public void RemoveRange(IEnumerable<T> entities)
+        {
+            _context.Set<T>().RemoveRange(entities);
+        }
     }
 }
