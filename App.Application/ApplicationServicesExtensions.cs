@@ -30,6 +30,7 @@ namespace App.Application
         {
             services.AddScoped<ICharacterService, CharacterService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
             return services;
         }
 

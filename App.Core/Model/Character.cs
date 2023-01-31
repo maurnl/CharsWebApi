@@ -6,8 +6,10 @@ namespace App.Core.Model
     {
         public string Name { get; set; } = string.Empty;
         public Gender Gender { get; set; }
+        public string OwnerId { get; set; }
         public virtual ICollection<Relationship> Relationships { get; set; } = new List<Relationship>();
         public virtual ICollection<Relationship> RelatedTo { get; set; } = new List<Relationship>();
+        public virtual CustomUser Owner { get; set; }
 
         public void UpdateRelationshipNames()
         {

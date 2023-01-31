@@ -8,6 +8,7 @@ using App.Application.Services.Abstractions;
 
 namespace App.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharactersController : ControllerBase
@@ -20,7 +21,7 @@ namespace App.API.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<CharacterReadDto>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<CharacterReadDto>), StatusCodes.Status200OK)]
         public IResult GetCharacters()
         {
             var characters = _characterService.GetAllCharacters();
@@ -79,12 +80,12 @@ namespace App.API.Controllers
         [HttpPost("create")]
         [ProducesResponseType(typeof(CharacterReadDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public Results<Created<CharacterReadDto>, BadRequest> CreateCharacter(CharacterCreateDto character)
+        public async Task<Results<Created<CharacterReadDto>, BadRequest>> CreateCharacter(CharacterCreateDto character)
         {
             CharacterReadDto createdCharacter;
             try
             {
-                createdCharacter = _characterService.CreateCharacter(character);
+                createdCharacter = await _characterService.CreateCharacter(character);
             }
             catch (DbUpdateConcurrencyException)
             {

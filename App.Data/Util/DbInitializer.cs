@@ -2,6 +2,7 @@
 using App.Core.Model.Relationships;
 using App.Core.Model.Relationships.Types;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Mime;
 
@@ -12,20 +13,44 @@ namespace App.DataAccess.Util
         public static void PopulateDb(IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();
-            SeedData(scope.ServiceProvider.GetRequiredService<MaroDbContext>());
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<CustomUser>>();
+            var context = scope.ServiceProvider.GetRequiredService<MaroDbContext>();
+            SeedUsers(userManager);
+            SeedCharacters(userManager, context);
         }
 
-        private static void SeedData(MaroDbContext context)
+        private static void SeedUsers(UserManager<CustomUser> userManager)
         {
+            if(userManager.Users.Any())
+            {
+                return;
+            }
+
+            var user = new CustomUser
+            {
+                UserName = "Yura",
+                Email = "yuramail@mail.com",
+                FullName = "Mauro Luciano"
+            };
+            userManager.CreateAsync(user, "Pa55w0rd!");
+        }
+
+        private static async void SeedCharacters(UserManager<CustomUser> userManager, MaroDbContext context)
+        {
+            var owner = await userManager.FindByEmailAsync("yuramail@mail.com");
             if (!context.Characters.Any())
             {
                 var charUno = new Character
                 {
+                    Owner = owner,
+                    OwnerId = owner.Id,
                     Name = "Testonio",
                     Gender = Gender.Male
                 };
                 var charDos = new Character
                 {
+                    Owner = owner,
+                    OwnerId = owner.Id,
                     Name = "Tester",
                     Gender = Gender.Female
                 };
@@ -36,6 +61,8 @@ namespace App.DataAccess.Util
                 context.Characters.Add(
                     new Character
                     {
+                        Owner = owner,
+                        OwnerId = owner.Id,
                         Name = "Testo",
                         Gender = Gender.Unknown
                     });

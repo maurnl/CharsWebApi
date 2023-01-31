@@ -6,30 +6,38 @@ using App.DataAccess.Abstractions;
 using App.Core.Model.Relationships;
 using App.Application.Extensions;
 using App.Application.Services.Abstractions;
+using Microsoft.AspNetCore.Identity;
 
 namespace App.Application.Services
 {
     public class CharacterService : ICharacterService
     {
         private readonly IRepository<Character> _charactersRepo;
-        private readonly IRepository<Relationship> _relationshipRepo;
+        private readonly IRepository<Relationship> _relationshipsRepo;
+        private readonly UserManager<CustomUser> _userManager;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public CharacterService(
             IRepository<Character> charsRepo,
             IRepository<Relationship> relRepo,
+            UserManager<CustomUser> userManager,
+            IUserService userService,
             IMapper mapper)
         {
             _charactersRepo = charsRepo;
             _mapper = mapper;
-            _relationshipRepo = relRepo;
+            _relationshipsRepo = relRepo;
+            _userManager = userManager;
+            _userService = userService;
         }
 
         public List<CharacterReadDto> GetAllCharacters()
         {
             var characters = _charactersRepo.GetAll()
                                        .Include(c => c.Relationships)
-                                       .Include(c => c.RelatedTo);
+                                       .Include(c => c.RelatedTo)
+                                       .Include(c => c.Owner);
             var lista = characters.ToList();
             foreach (var item in characters)
             {
@@ -61,18 +69,25 @@ namespace App.Application.Services
 
             var relationshipModel = relationshipBuilder.Build();
             relationshipModel.RelationshipTypeName = relationship;
-            _relationshipRepo.Add(relationshipModel);
-            _relationshipRepo.SaveChanges();
+            _relationshipsRepo.Add(relationshipModel);
+            _relationshipsRepo.SaveChanges();
         }
 
-        public CharacterReadDto CreateCharacter(CharacterCreateDto character)
+        public async Task<CharacterReadDto> CreateCharacter(CharacterCreateDto character)
         {
             if (!GenderExists(character.Gender))
             {
                 throw new ArgumentException(nameof(character.Gender));
             }
+            var ownerGuid = _userService.GetCurrentUserGuid();
+            if (ownerGuid == string.Empty)
+            {
+                throw new ArgumentException();
+            }
 
             var newCharacter = _mapper.Map<Character>(character);
+            newCharacter.Owner = (await _userManager.FindByIdAsync(ownerGuid))!;
+            newCharacter.OwnerId = ownerGuid;
 
             try
             {
@@ -126,10 +141,10 @@ namespace App.Application.Services
                 throw new ArgumentException(nameof(characterId));
             }
 
-            _relationshipRepo.RemoveRange(_relationshipRepo.GetAll().Where(r => r.RelatedCharacterId == characterId || r.CharacterId == characterId));
+            _relationshipsRepo.RemoveRange(_relationshipsRepo.GetAll().Where(r => r.RelatedCharacterId == characterId || r.CharacterId == characterId));
             _charactersRepo.Remove(character);
             _charactersRepo.SaveChanges();
-            _relationshipRepo.SaveChanges();
+            _relationshipsRepo.SaveChanges();
             return _mapper.Map<CharacterReadDto>(character);
         }
     }

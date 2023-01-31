@@ -30,6 +30,12 @@ namespace App.DataAccess
                         .WithMany(r => r.RelatedTo)
                         .HasForeignKey(r => r.RelatedCharacterId)
                         .OnDelete(DeleteBehavior.ClientCascade);
+
+            modelBuilder.Entity<CustomUser>()
+                        .HasMany(u => u.Characters)
+                        .WithOne(c => c.Owner)
+                        .HasForeignKey(c => c.OwnerId)
+                        .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

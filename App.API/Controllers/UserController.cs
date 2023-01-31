@@ -17,16 +17,19 @@ namespace App.API.Controllers
     {
         private readonly UserManager<CustomUser> _userManager;
         private readonly ITokenService _tokenService;
-        private readonly IHttpContextAccessor _context;
 
-        public UserController(UserManager<CustomUser> userManager, ITokenService tokenService, IHttpContextAccessor context)
+        public UserController(
+            UserManager<CustomUser> userManager,
+            ITokenService tokenService)
         {
             _userManager = userManager;
             _tokenService = tokenService;
-            _context = context;
         }
         
         [HttpPost("register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+
         public async Task<Results<Ok, ProblemHttpResult>> Register(UserCreateDto newUser)
         {
             if(newUser is null)
@@ -45,13 +48,15 @@ namespace App.API.Controllers
 
             if(!result.Succeeded)
             {
-                return TypedResults.Problem(result.Errors.FirstOrDefault()?.Description);
+                return TypedResults.Problem(result.Errors.FirstOrDefault()?.Description, statusCode: 400);
             }
 
             return TypedResults.Ok();
         }
 
         [HttpPost("token")]
+        [ProducesResponseType(typeof(TokenReadDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(TokenReadDto), StatusCodes.Status400BadRequest)]
         public async Task<Results<Ok<TokenReadDto>, BadRequest>> GetToken(UserLoginDto user)
         {
             var loggedUser = await _userManager.FindByNameAsync(user.Username);
@@ -63,23 +68,6 @@ namespace App.API.Controllers
             var token = _tokenService.GenerateToken(loggedUser);
 
             return TypedResults.Ok(token);
-        }
-
-        [Authorize]
-        [HttpGet("who")]
-        public ActionResult<string> CurrentUser()
-        {
-            var context = _context.HttpContext;
-            if (context?.User != null && context?.User.Identity != null && context.User.Identity.IsAuthenticated)
-            {
-                var identifier = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-                if (identifier != null)
-                {
-                    return identifier.Value;
-                }
-            }
-
-            return string.Empty;
         }
     }
 }
