@@ -2,9 +2,9 @@
 
 namespace App.Core.Model.Relationships
 {
-    public class RelationshipTypeFactory
+    public static class RelationshipTypeFactory
     {
-        public IRelationshipType CreateRelationship(string relationshipName)
+        public static IRelationshipType CreateRelationship(string relationshipName)
         {
             return relationshipName switch
             {

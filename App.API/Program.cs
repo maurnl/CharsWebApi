@@ -14,6 +14,8 @@ namespace App.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddCors();
+
             builder.Services.AddDataAccess();
 
             builder.Services.AddApplication(builder.Environment);
@@ -27,6 +29,17 @@ namespace App.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            else
+            {
+                app.UseHsts();
+            }
+
+            app.UseCors(opt =>
+            {
+                opt.AllowAnyHeader();
+                opt.AllowAnyMethod();
+                opt.AllowAnyOrigin();
+            });
 
             app.UseHttpsRedirection();
 

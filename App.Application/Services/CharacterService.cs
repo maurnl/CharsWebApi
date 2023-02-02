@@ -62,10 +62,9 @@ namespace App.Application.Services
             var character = _charactersRepo.Get(characterId);
             var relatedCharacter = _charactersRepo.Get(relatedCharacterId);
             var relationshipBuilder = new RelationshipBuilder();
-            var typeFactory = new RelationshipTypeFactory();
             relationshipBuilder.Link(character)
                                .WithCharacter(relatedCharacter)
-                               .As(typeFactory.CreateRelationship(relationship));
+                               .As(RelationshipTypeFactory.CreateRelationship(relationship));
 
             var relationshipModel = relationshipBuilder.Build();
             relationshipModel.RelationshipTypeName = relationship;
