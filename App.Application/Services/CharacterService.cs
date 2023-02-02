@@ -13,21 +13,18 @@ namespace App.Application.Services
     public class CharacterService : ICharacterService
     {
         private readonly IRepository<Character> _charactersRepo;
-        private readonly IRepository<Relationship> _relationshipsRepo;
         private readonly UserManager<CustomUser> _userManager;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public CharacterService(
             IRepository<Character> charsRepo,
-            IRepository<Relationship> relRepo,
             UserManager<CustomUser> userManager,
             IUserService userService,
             IMapper mapper)
         {
             _charactersRepo = charsRepo;
             _mapper = mapper;
-            _relationshipsRepo = relRepo;
             _userManager = userManager;
             _userService = userService;
         }
@@ -50,26 +47,6 @@ namespace App.Application.Services
         {
             var character = GetAllCharacters().FirstOrDefault(c => c.Id == id);
             return _mapper.Map<CharacterReadDto>(character);
-        }
-
-        public void AddRelationship(int characterId, int relatedCharacterId, string relationship)
-        {
-            if (!_charactersRepo.Exists(characterId) || !_charactersRepo.Exists(relatedCharacterId))
-            {
-                throw new ArgumentException(nameof(characterId));
-            }
-
-            var character = _charactersRepo.Get(characterId);
-            var relatedCharacter = _charactersRepo.Get(relatedCharacterId);
-            var relationshipBuilder = new RelationshipBuilder();
-            relationshipBuilder.Link(character)
-                               .WithCharacter(relatedCharacter)
-                               .As(RelationshipTypeFactory.CreateRelationship(relationship));
-
-            var relationshipModel = relationshipBuilder.Build();
-            relationshipModel.RelationshipTypeName = relationship;
-            _relationshipsRepo.Add(relationshipModel);
-            _relationshipsRepo.SaveChanges();
         }
 
         public async Task<CharacterReadDto> CreateCharacter(CharacterCreateDto character)
@@ -140,10 +117,8 @@ namespace App.Application.Services
                 throw new ArgumentException(nameof(characterId));
             }
 
-            _relationshipsRepo.RemoveRange(_relationshipsRepo.GetAll().Where(r => r.RelatedCharacterId == characterId || r.CharacterId == characterId));
             _charactersRepo.Remove(character);
             _charactersRepo.SaveChanges();
-            _relationshipsRepo.SaveChanges();
             return _mapper.Map<CharacterReadDto>(character);
         }
     }

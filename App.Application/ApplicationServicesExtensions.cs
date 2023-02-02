@@ -29,6 +29,7 @@ namespace App.Application
         public static IServiceCollection AddServices(this IServiceCollection services, IWebHostEnvironment env)
         {
             services.AddScoped<ICharacterService, CharacterService>();
+            services.AddScoped<IRelationshipsService, RelationshipsService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
             return services;

@@ -7,7 +7,6 @@ namespace App.Application.Services.Abstractions
         Task<CharacterReadDto> CreateCharacter(CharacterCreateDto character);
         List<CharacterReadDto> GetAllCharacters();
         CharacterReadDto GetCharacterById(int id);
-        void AddRelationship(int characterId, int relatedCharacterId, string relationship);
         CharacterReadDto UpdateCharacter(int characterId, CharacterUpdateDto newCharData);
         CharacterReadDto DeleteCharacter(int characterId);
     }

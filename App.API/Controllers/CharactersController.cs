@@ -14,10 +14,13 @@ namespace App.API.Controllers
     public class CharactersController : ControllerBase
     {
         private readonly ICharacterService _characterService;
+        private readonly IRelationshipsService _relationshipsService;
 
-        public CharactersController(ICharacterService charsService)
+        public CharactersController(ICharacterService charsService,
+                    IRelationshipsService relationshipsService)
         {
             _characterService = charsService;
+            _relationshipsService = relationshipsService;
         }
 
         [HttpGet]
@@ -107,7 +110,7 @@ namespace App.API.Controllers
         {
             try
             {
-                _characterService.AddRelationship(id, relatedId, relationship);
+                _relationshipsService.AddRelationship(id, relatedId, relationship);
             }
             catch (ArgumentException)
             {

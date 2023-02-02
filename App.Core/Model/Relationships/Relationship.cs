@@ -23,7 +23,7 @@ namespace App.Core.Model.Relationships
             {
                 if (_relType == null)
                 {
-                    _relType = new RelationshipTypeFactory().CreateRelationship(RelationshipTypeName);
+                    _relType = RelationshipTypeFactory.CreateRelationship(RelationshipTypeName);
                 }
                 return _relType;
             }
