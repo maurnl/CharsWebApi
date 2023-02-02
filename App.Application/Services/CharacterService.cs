@@ -36,11 +36,11 @@ namespace App.Application.Services
                                        .Include(c => c.RelatedTo)
                                        .Include(c => c.Owner);
             var lista = characters.ToList();
-            foreach (var item in characters)
+            foreach (var item in lista)
             {
                 item.UpdateRelationshipNames();
             }
-            return _mapper.Map<IEnumerable<CharacterReadDto>>(characters).ToList();
+            return _mapper.Map<IEnumerable<CharacterReadDto>>(lista).ToList();
         }
 
         public CharacterReadDto GetCharacterById(int id)

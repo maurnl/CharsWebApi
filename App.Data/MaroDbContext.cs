@@ -23,19 +23,20 @@ namespace App.DataAccess
                         .HasOne(r => r.Character)
                         .WithMany(r => r.Relationships)
                         .HasForeignKey(r => r.CharacterId)
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Relationship>()
                         .HasOne(r => r.RelatedCharacter)
                         .WithMany(r => r.RelatedTo)
                         .HasForeignKey(r => r.RelatedCharacterId)
-                        .OnDelete(DeleteBehavior.ClientCascade);
+                        .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CustomUser>()
                         .HasMany(u => u.Characters)
                         .WithOne(c => c.Owner)
                         .HasForeignKey(c => c.OwnerId)
                         .OnDelete(DeleteBehavior.Cascade);
+
         }
     }
 }

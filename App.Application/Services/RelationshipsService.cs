@@ -40,5 +40,11 @@ namespace App.Application.Services
             _relationshipsRepo.Add(relationshipModel);
             _relationshipsRepo.SaveChanges();
         }
+
+        public void DeleteRelationships(int characterId)
+        {
+            _relationshipsRepo.RemoveRange(_relationshipsRepo.GetAll().Where(r => r.RelatedCharacterId == characterId || r.CharacterId == characterId));
+            _relationshipsRepo.SaveChanges();
+        }
     }
 }

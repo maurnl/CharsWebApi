@@ -133,6 +133,7 @@ namespace App.API.Controllers
             try
             {
                 var character = _characterService.DeleteCharacter(id);
+                _relationshipsService.DeleteRelationships(id);
                 return Ok(character);
             }catch(Exception)
             {

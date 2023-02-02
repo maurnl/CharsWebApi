@@ -5,5 +5,6 @@ namespace App.Application.Services.Abstractions
     public interface IRelationshipsService
     {
         void AddRelationship(int characterId, int relatedCharacterId, string relationship);
+        void DeleteRelationships(int characterId);
     }
 }
