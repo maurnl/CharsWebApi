@@ -65,19 +65,8 @@ namespace App.Application.Services
             newCharacter.Owner = (await _userManager.FindByIdAsync(ownerGuid))!;
             newCharacter.OwnerId = ownerGuid;
 
-            try
-            {
-                _charactersRepo.Add(newCharacter);
-                _charactersRepo.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                throw ex;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
+            _charactersRepo.Add(newCharacter);
+            _charactersRepo.SaveChanges();
 
             return _mapper.Map<CharacterReadDto>(newCharacter);
         }

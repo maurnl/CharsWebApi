@@ -104,7 +104,10 @@ namespace App.API.Controllers
         }
 
         [HttpPost("{id}/family/add/{relatedId}")]
-        public ActionResult<CharacterReadDto> AddRelationship(int id,
+        [ProducesResponseType(typeof(CharacterReadDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public Results<Ok<CharacterReadDto>, NotFound, BadRequest> AddRelationship(int id,
                                             int relatedId,
                                             [FromQuery] string relationship = "stranger")
         {
@@ -114,30 +117,30 @@ namespace App.API.Controllers
             }
             catch (ArgumentException)
             {
-                return NotFound();
+                return TypedResults.NotFound();
             }
             catch (Exception)
             {
-                return BadRequest();
+                return TypedResults.BadRequest();
             }
 
             var updatedCharacter = _characterService.GetCharacterById(id);
-            return Ok(updatedCharacter);
+            return TypedResults.Ok(updatedCharacter);
         }
 
         [HttpDelete("{id}/delete")]
         [ProducesResponseType(typeof(CharacterReadDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<CharacterReadDto> DeleteCharacter(int id)
+        public Results<Ok<CharacterReadDto>, NotFound> DeleteCharacter(int id)
         {
             try
             {
                 var character = _characterService.DeleteCharacter(id);
                 _relationshipsService.DeleteRelationships(id);
-                return Ok(character);
+                return TypedResults.Ok(character);
             }catch(Exception)
             {
-                return NotFound();
+                return TypedResults.NotFound();
             }
         }
     }
