@@ -13,19 +13,15 @@ namespace App.Core.Model
 
         public void UpdateRelationshipNames()
         {
-            foreach (var rel in Relationships)
+            SetRelativeRelationshipsNames(this.Relationships);
+            SetRelativeRelationshipsNames(this.RelatedTo);
+        }
+        
+        private void SetRelativeRelationshipsNames(ICollection<Relationship> rels)
+        {
+            foreach(var rel in rels)
             {
-                if (rel.RelativeRelationshipName == null
-                    || rel.OppositeRelativeRelationshipName == null)
-                {
-                    rel.RelationshipType.UpdateNames(this, rel);
-                }
-            }
-
-            foreach (var rel in RelatedTo)
-            {
-                if (rel.RelativeRelationshipName == null
-                    || rel.OppositeRelativeRelationshipName == null)
+                if(rel.RelativeRelationshipName is null || rel.OppositeRelativeRelationshipName is null)
                 {
                     rel.RelationshipType.UpdateNames(this, rel);
                 }
