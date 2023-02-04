@@ -7,7 +7,7 @@ namespace App.Core.Model.Relationships.Types
     {
         public void UpdateNames(Character character, Relationship rel)
         {
-            if (rel.Character == character)
+            if (rel.Character.ReferenceEquals(character))
             {
                 rel.RelativeRelationshipName = SetSilbingsNameByGender(character.Gender);
 
