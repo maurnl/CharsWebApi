@@ -15,11 +15,11 @@ namespace App.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<CustomUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ITokenService _tokenService;
 
         public UserController(
-            UserManager<CustomUser> userManager,
+            UserManager<AppUser> userManager,
             ITokenService tokenService)
         {
             _userManager = userManager;
@@ -37,7 +37,7 @@ namespace App.API.Controllers
                 return TypedResults.Problem();
             }
 
-            var user = new CustomUser
+            var user = new AppUser
             {
                 UserName = newUser.Username,
                 Email = newUser.Email,

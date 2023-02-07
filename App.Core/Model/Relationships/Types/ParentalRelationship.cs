@@ -7,7 +7,7 @@ namespace App.Core.Model.Relationships.Types
     {
         public void UpdateNames(Character character, Relationship rel)
         {
-            if (rel.Character.ReferenceEquals(character))
+            if (rel.Character == character)
             {
                 rel.RelativeRelationshipName = SetPaternalNameByGender(character.Gender);
 

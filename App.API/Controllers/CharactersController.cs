@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using App.Application.Dtos;
 using Microsoft.AspNetCore.Http.HttpResults;
-using App.Core.Model;
 using Microsoft.AspNetCore.Authorization;
 using App.Application.Services.Abstractions;
 

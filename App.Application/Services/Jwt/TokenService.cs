@@ -15,7 +15,7 @@ namespace App.Application.Services.Jwt
         {
             _configuration = configuration;
         }
-        public TokenReadDto GenerateToken(CustomUser user)
+        public TokenReadDto GenerateToken(AppUser user)
         {
             List<Claim> claims = new List<Claim>() {
                 new Claim (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),

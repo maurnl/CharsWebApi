@@ -40,7 +40,7 @@ namespace App.DataAccess
 
         public static IServiceCollection AddAuthorization(this IServiceCollection services)
         {
-            services.AddIdentityCore<CustomUser>()
+            services.AddIdentityCore<AppUser>()
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<MaroDbContext>();
 

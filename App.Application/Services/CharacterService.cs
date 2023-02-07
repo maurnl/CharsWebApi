@@ -62,6 +62,7 @@ namespace App.Application.Services
             }
 
             var newCharacter = _mapper.Map<Character>(character);
+
             newCharacter.Owner = (await _userManager.FindByIdAsync(ownerGuid))!;
             newCharacter.OwnerId = ownerGuid;
 

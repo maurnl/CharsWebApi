@@ -9,7 +9,7 @@ namespace App.Core.Model
         public string OwnerId { get; set; }
         public virtual ICollection<Relationship> Relationships { get; set; } = new List<Relationship>();
         public virtual ICollection<Relationship> RelatedTo { get; set; } = new List<Relationship>();
-        public virtual CustomUser Owner { get; set; }
+        public virtual AppUser Owner { get; set; }
 
         public void UpdateRelationshipNames()
         {

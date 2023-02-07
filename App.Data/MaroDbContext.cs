@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace App.DataAccess
 {
-    public class MaroDbContext : IdentityDbContext<CustomUser>
+    public class MaroDbContext : IdentityDbContext<AppUser>
     {
         public MaroDbContext(DbContextOptions<MaroDbContext> options) : base(options)
         {
@@ -31,7 +31,7 @@ namespace App.DataAccess
                         .HasForeignKey(r => r.RelatedCharacterId)
                         .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<CustomUser>()
+            modelBuilder.Entity<AppUser>()
                         .HasMany(u => u.Characters)
                         .WithOne(c => c.Owner)
                         .HasForeignKey(c => c.OwnerId)

@@ -13,20 +13,20 @@ namespace App.DataAccess.Util
         public static void PopulateDb(IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices.CreateScope();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<CustomUser>>();
+            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
             var context = scope.ServiceProvider.GetRequiredService<MaroDbContext>();
             SeedUsers(userManager);
             SeedCharacters(userManager, context);
         }
 
-        private static void SeedUsers(UserManager<CustomUser> userManager)
+        private static void SeedUsers(UserManager<AppUser> userManager)
         {
             if(userManager.Users.Any())
             {
                 return;
             }
 
-            var user = new CustomUser
+            var user = new AppUser
             {
                 UserName = "Yura",
                 Email = "yuramail@mail.com",
@@ -35,7 +35,7 @@ namespace App.DataAccess.Util
             userManager.CreateAsync(user, "Pa55w0rd!");
         }
 
-        private static async void SeedCharacters(UserManager<CustomUser> userManager, MaroDbContext context)
+        private static async void SeedCharacters(UserManager<AppUser> userManager, MaroDbContext context)
         {
             var owner = await userManager.FindByEmailAsync("yuramail@mail.com");
             if (!context.Characters.Any())

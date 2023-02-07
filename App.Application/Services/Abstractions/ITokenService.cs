@@ -5,6 +5,6 @@ namespace App.Application.Services.Abstractions
 {
     public interface ITokenService
     {
-        TokenReadDto GenerateToken(CustomUser user);
+        TokenReadDto GenerateToken(AppUser user);
     }
 }

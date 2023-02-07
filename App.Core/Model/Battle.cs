@@ -11,11 +11,11 @@ namespace App.Core.Model
     public class Battle : EntityBase
     {
         [Required]
-        public CustomUser UserOne { get; set; }
+        public AppUser UserOne { get; set; }
         [Required]
         public Character UserOneCharacter { get; set; }
         [Required]
-        public CustomUser UserTwo { get; set; }
+        public AppUser UserTwo { get; set; }
         [Required]
         public Character UserTwoCharacter { get; set; }
         [Required]

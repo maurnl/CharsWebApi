@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace App.Core.Model
 {
-    public class CustomUser : IdentityUser
+    public class AppUser : IdentityUser
     {
         public string FullName { get; set; }
         public virtual ICollection<Character> Characters { get; set; }
