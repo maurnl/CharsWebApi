@@ -45,7 +45,10 @@ namespace App.DataAccess.Util
                     Owner = owner,
                     OwnerId = owner.Id,
                     Name = "Testonio",
-                    Gender = Gender.Male
+                    Gender = Gender.Male,
+                    Strength = 25,
+                    Knowledge = 25,
+                    Dexterity = 25
                 };
                 var charDos = new Character
                 {
@@ -64,7 +67,10 @@ namespace App.DataAccess.Util
                         Owner = owner,
                         OwnerId = owner.Id,
                         Name = "Testo",
-                        Gender = Gender.Unknown
+                        Gender = Gender.Unknown,
+                        Strength = 14,
+                        Knowledge = 16,
+                        Dexterity = 14
                     });
 
                 context.SaveChanges();
