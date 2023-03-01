@@ -7,7 +7,6 @@ using App.Application.Services.Abstractions;
 
 namespace App.API.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CharactersController : ControllerBase

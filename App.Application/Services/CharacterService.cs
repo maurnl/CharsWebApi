@@ -13,13 +13,13 @@ namespace App.Application.Services
     public class CharacterService : ICharacterService
     {
         private readonly IRepository<Character> _charactersRepo;
-        private readonly UserManager<CustomUser> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
         public CharacterService(
             IRepository<Character> charsRepo,
-            UserManager<CustomUser> userManager,
+            UserManager<AppUser> userManager,
             IUserService userService,
             IMapper mapper)
         {

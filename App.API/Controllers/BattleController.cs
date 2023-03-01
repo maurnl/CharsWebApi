@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using App.Application.Dtos;
+using App.Application.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace App.API.Controllers
@@ -7,11 +10,25 @@ namespace App.API.Controllers
     [ApiController]
     public class BattleController : ControllerBase
     {
-        [Authorize]
-        [HttpGet("ping")]
-        public ActionResult<string> Ping()
+        private readonly IBattleService _battleService;
+
+        public BattleController(IBattleService battleService)
         {
-            return Ok("pong!");
+            _battleService = battleService;
+        }
+
+        [HttpPost("new")]
+        public Results<Ok<BattleResultReadDto>, BadRequest> NewBattle(int characterOneId, int characterTwoId)
+        {
+            try
+            {
+                var result = _battleService.GenerateBattle(characterOneId, characterTwoId);
+                return TypedResults.Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return TypedResults.BadRequest();
+            }
         }
     }
 }
