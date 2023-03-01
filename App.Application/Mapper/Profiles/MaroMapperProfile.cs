@@ -22,6 +22,7 @@ namespace App.Application.Mapper.Profiles
                     .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner.UserName));
             CreateMap<CharacterCreateDto, Character>()
                     .ForMember(g => g.Gender, opt => opt.MapFrom(g => (Gender)Enum.Parse(typeof(Gender), g.Gender.FirstLetterToUpper())));
+            CreateMap<BattleResult, BattleResultReadDto>().ForMember(b => b.Winner, opt => opt.MapFrom(src => src.Winner.Name));
         }
     }
 }

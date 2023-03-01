@@ -8,6 +8,6 @@ namespace App.Application.Dtos
 {
     public class BattleResultReadDto
     {
-        string Winner { get; set; } = string.Empty;
+        public string Winner { get; set; } = string.Empty;
     }
 }
