@@ -1,6 +1,5 @@
 ﻿using App.Application.Dtos;
 using App.Application.Services.Abstractions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +17,8 @@ namespace App.API.Controllers
         }
 
         [HttpPost("new")]
+        [ProducesResponseType(typeof(BattleResultReadDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Results<Ok<BattleResultReadDto>, BadRequest> NewBattle(int characterOneId, int characterTwoId)
         {
             try
