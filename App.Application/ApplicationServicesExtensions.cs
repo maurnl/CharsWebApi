@@ -32,6 +32,7 @@ namespace App.Application
             services.AddScoped<IRelationshipsService, RelationshipsService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBattleService, BattleService>();
             return services;
         }
 
